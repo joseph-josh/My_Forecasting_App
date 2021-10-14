@@ -35,8 +35,8 @@ def upload():
         data = pd.read_csv(f)
 
         session["data"] = data
-    return render_template('simple.html', tables=[data.to_html(classes='data')], titles=data.columns.values)
-    #return render_template('index.html')
+        return render_template('simple.html', tables=[data.to_html(classes='data')], titles=data.columns.values)
+    return render_template('index.html')
 
 
 @app.route("/configuration", methods= ["GET", "POST"])
