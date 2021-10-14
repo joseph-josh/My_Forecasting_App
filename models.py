@@ -67,7 +67,7 @@ import datetime
 
 def columns_names():
     
-    data = pd.read_csv("uploads/data.csv", nrows = 500)
+    data = pd.read_csv("./data.csv", nrows = 500)
     # , nrows = 2000
     print(type(data))
 
