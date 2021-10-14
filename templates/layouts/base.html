@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Notika - Forecasting App</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- favicon
+		============================================ -->
+	<link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename ="img/favicon.ico")}}">
+	<!-- Google Fonts
+		============================================ -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+	<!-- Bootstrap CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/bootstrap.min.css")}}">
+	<!-- Bootstrap CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/font-awesome.min.css")}}">
+	<!-- owl.carousel CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/owl.carousel.css")}}">
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/owl.theme.css")}}">
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/owl.transitions.css")}}">
+	<!-- meanmenu CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/meanmenu/meanmenu.min.css')}}">
+	<!-- animate CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/animate.css")}}">
+	<!-- normalize CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ="css/normalize.css")}}">
+	<!-- mCustomScrollbar CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/scrollbar/jquery.mCustomScrollbar.min.css')}}">
+	<!-- jvectormap CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/jvectormap/jquery-jvectormap-2.0.3.css')}}">
+	<!-- notika icon CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/notika-custom-icon.css')}}">
+	<!-- wave CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/wave/waves.min.css')}}">
+	<!-- main CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/wave/waves.min.css')}}">
+	<!-- dropzone CSS
+		============================================ -->
+		<link rel="stylesheet" href="{{url_for('static', filename ='css/dropzone/dropzone.css')}}">
+	<!-- style CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='style.css')}}">
+	 <!-- bootstrap select CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/bootstrap-select/bootstrap-select.css')}}">
+	<!-- responsive CSS
+		============================================ -->
+	<link rel="stylesheet" href="{{url_for('static', filename ='css/responsive.css')}}">
+	<!-- modernizr JS
+		============================================ -->
+		
+	{% block style %}{% endblock style %}	
+	
+
+	
+
+	
+</head>
+
+<body data-background-color="dark">
+	<div class="wrapper">
+
+
+		{% block navigation %}{% endblock navigation %}
+
+		<div class="main-panel">
+			
+			{% block content %}{% endblock content %}
+
+			{% include 'includes/footer.html' %}
+
+		</div>
+
+	</div>
+
+	{% include 'includes/scripts.html' %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}{% endblock javascripts %}
+
+</body>
+</html>

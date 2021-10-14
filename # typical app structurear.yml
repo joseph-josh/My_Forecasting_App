@@ -1,0 +1,34 @@
+
+        
+         myforecastingapp/
+                    |
+                    | - uploads/
+                    | - ml_models/
+                    | - static/
+                            | - css/
+                            | - fonts/
+                            | - images/
+                            | - img/
+                            | - js/
+                            |
+                    | - templates/
+                            | - eda/
+                            | - includes/  
+                                        | - footer.html
+                                        | - scripts.html
+                            | - layouts/    
+                                        | - base.html
+                            |
+                            | - configuration.html
+                            | - detailed_ranking.html
+                            | - index.html
+                            | - ml_prediction_form.html
+                            | - ml_prediction_results.html
+                            | - simple_ranking.html
+                    | - app.py
+                    | - models.py
+                    | - Proctfile
+                    | - requirements.txt
+    
+
+    
