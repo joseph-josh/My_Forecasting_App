@@ -32,18 +32,20 @@ dropzone = Dropzone(app)
 def upload():
     if request.method == 'POST':
         f = request.files.get('file')
-        f.save(os.path.join(app.config['UPLOADED_PATH'], "data.csv"))
+        data = pd.read_csv(f)
+
+        session["data"] = data
     return render_template('index.html')
 
 
 @app.route("/configuration", methods= ["GET", "POST"])
 def configuration():
-    results = models.columns_names()
+
+    data = session.get('data', None)
+    results = models.columns_names(data)
     columns = results["columns"]
-    data = results["data"]
 
     session.permanent = True
-    session['data'] = data
 
     if request.method == "POST":
         session.permanent = True

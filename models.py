@@ -65,11 +65,11 @@ from joblib import dump, load
 import datetime
 
 
-def columns_names():
+def columns_names(data):
     
-    data = pd.read_csv("./data.csv", nrows = 500)
+    # data = pd.read_csv("data.csv", nrows = 500)
     # , nrows = 2000
-    print(type(data))
+    # print(type(data))
 
     columns = list(data.columns)
 
@@ -794,7 +794,6 @@ def global_function(configuration, data):
     test_data_index = list(np.arange(start=len(train_vm)+1, stop=len(data_vm)+1, step=1))
             
     results = {
-        "data": data, 
         "train_data_index": train_data_index,
         "test_data_index": test_data_index,
         "train_data" : list(train_tm["cnt"]),
