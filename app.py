@@ -45,7 +45,7 @@ def upload():
 def configuration():
 
     data = session.get('data', None)
-    # return jsonify(data)
+    return jsonify(data)
 
     results = models.columns_names(data)
     columns = results["columns"]
