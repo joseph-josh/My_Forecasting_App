@@ -34,10 +34,10 @@ dropzone = Dropzone(app)
 def upload():
     if request.method == 'POST':
         f = request.files.get('file')
-        data = pd.read_csv(f)
+        #data = pd.read_csv(f)
 
         session["data"] = f
-        return jsonify(data.to_json(orient="split"))
+        #return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
 
