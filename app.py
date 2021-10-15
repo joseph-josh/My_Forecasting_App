@@ -21,6 +21,7 @@ app.config.update(
     UPLOADED_PATH=os.path.join(basedir, 'uploads'),
     # Flask-Dropzone config:
     DROPZONE_MAX_FILE_SIZE=1000,
+    DROPZONE_ALLOWED_FILE_TYPE = 'image',
     DROPZONE_MAX_FILES=1,
     DROPZONE_REDIRECT_VIEW='configuration', 
     DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
@@ -35,7 +36,7 @@ def upload():
         f = request.files.get('file')
         data = pd.read_csv(f)
 
-        session["data"] = data
+        session["data"] = f
         return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
@@ -46,17 +47,17 @@ def configuration():
     data = session.get('data', None)
     return jsonify(data.to_json(orient="split"))
 
-    results = models.columns_names(data)
-    columns = results["columns"]
+    # results = models.columns_names(data)
+    # columns = results["columns"]
 
-    session.permanent = True
+    # session.permanent = True
 
-    if request.method == "POST":
-        session.permanent = True
-        form_data = request.form
-        session['configuration'] = form_data
-        return redirect("/detailed_ranking")
-    return render_template("configuration.html", columns = columns)
+    # if request.method == "POST":
+    #     session.permanent = True
+    #     form_data = request.form
+    #     session['configuration'] = form_data
+    #     return redirect("/detailed_ranking")
+    # return render_template("configuration.html", columns = columns)
 
 
 @app.route("/detailed_ranking")
