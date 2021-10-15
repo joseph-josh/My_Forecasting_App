@@ -45,7 +45,7 @@ def upload():
 def configuration():
 
     data = session.get('data', None)
-    return jsonify(data.to_json(orient="split"))
+    return jsonify(data)
 
     # results = models.columns_names(data)
     # columns = results["columns"]
