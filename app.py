@@ -18,7 +18,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 app.config.update(
-    UPLOADED_PATH=os.path.join(basedir, 'uploads'),
+    UPLOADED_PATH='/uploads',
     # Flask-Dropzone config:
     DROPZONE_MAX_FILE_SIZE=1000,
     DROPZONE_ALLOWED_FILE_TYPE = 'image',
