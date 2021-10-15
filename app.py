@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, session, request, redirect, url_for
+from flask import Flask, json, render_template, jsonify, session, request, redirect, url_for
 from pandas.core.indexes.base import Index
 from flask_session import Session
 from datetime import timedelta
@@ -35,7 +35,7 @@ def upload():
         data = pd.read_csv(f)
 
         session["data"] = data
-        return render_template('simple.html', tables=[data.to_html(classes='data')], titles=data.columns.values)
+        return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
 
@@ -43,6 +43,8 @@ def upload():
 def configuration():
 
     data = session.get('data', None)
+    return jsonify(data.to_json(orient="split"))
+    
     results = models.columns_names(data)
     columns = results["columns"]
 
