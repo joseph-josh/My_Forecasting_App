@@ -21,7 +21,7 @@ app.config.update(
     UPLOADED_PATH=os.path.join(basedir, 'uploads'),
     # Flask-Dropzone config:
     DROPZONE_MAX_FILE_SIZE=1000,
-    #DROPZONE_ALLOWED_FILE_TYPE = 'image',
+    DROPZONE_ALLOWED_FILE_TYPE = 'image',
     DROPZONE_MAX_FILES=1,
     DROPZONE_REDIRECT_VIEW='configuration', 
     DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
