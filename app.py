@@ -8,6 +8,7 @@ import pandas as pd
 from flask_dropzone import Dropzone
 import os
 import re
+import json
 
 sess = Session()
 
@@ -44,7 +45,7 @@ def configuration():
 
     data = session.get('data', None)
     return jsonify(data.to_json(orient="split"))
-    
+
     results = models.columns_names(data)
     columns = results["columns"]
 
