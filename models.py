@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# # One-step-ahead forecasting
+### ONE-STEP-AHEAD FORECASTING
 
 # #### Forecasting models:
 # 
@@ -20,6 +18,7 @@
 # 
 # 
 # #### Metrics for models' accuracy assessment
+#
 # - RMSE
 # - MAE
 # - ME
@@ -32,14 +31,14 @@
 # - https://www.analyticsvidhya.com/blog/2018/02/time-series-forecasting-methods/?
 # - https://www.statsmodels.org/stable/examples/notebooks/generated/exponential_smoothing.html
 # - One-step-ahead forecasting and multiple-steps forecasting <br>
-# https://machinelearningmastery.com/multi-step-time-series-forecasting/#:~:text=Multi%2DStep%20Forecasting,-Generally%2C%20time%20series&text=This%20is%20called%20a%20one,step%20time%20series%20forecasting%20problems.
+# - https://machinelearningmastery.com/multi-step-time-series-forecasting/#:~:text=Multi%2DStep%20Forecasting,-Generally%2C%20time%20series&text=This%20is%20called%20a%20one,step%20time%20series%20forecasting%20problems.
+
 
 
 import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt 
-#get_ipython().run_line_magic('matplotlib', 'inline')
 import seaborn as sns
 
 from statsmodels.tsa.api import ExponentialSmoothing, SimpleExpSmoothing, Holt
@@ -65,11 +64,11 @@ from joblib import dump, load
 import datetime
 
 
-def columns_names(data):
+def columns_names():
     
-    # data = pd.read_csv("data.csv", nrows = 500)
+    data = pd.read_csv("uploads/data.csv", nrows = 500)
     # , nrows = 2000
-    # print(type(data))
+    print(type(data))
 
     columns = list(data.columns)
 
@@ -107,13 +106,8 @@ def global_function(configuration, data):
 
     # Importing the datafloor(len(train_tm)/seasonal_periods)
     # variable time : name of the column representing the date
-    # data = pd.read_csv("london_merged.csv", index_col="time")
-    # Loading only 500 rows from the actual dataset. Make sure your load
-    # more than 100 lest you get errors while running the moving_average_100
-
 
     columns = list(data.columns)
-
 
 
     ## Getting configurations 
@@ -185,19 +179,6 @@ def global_function(configuration, data):
 
     for cat in cat_cols:
         cat_and_values[cat] =list(data_vm[cat].unique())
-        
-
-    # print("***********************")
-    # print("*")
-    # print("*")
-    # print("*")
-    # print(cat_and_values)
-    # print(num_cols)
-    # print("*")
-    # print("*")
-    # print("*")
-    # print("***********************")
-
 
 
 
@@ -221,14 +202,6 @@ def global_function(configuration, data):
     train_vm = data_vm[:limit_vm] 
     test_vm = data_vm[limit_vm:]
 
-    # print("Length of train_tm: ", len(train_tm))
-    # print("Length of test_tm: ", len(test_tm))
-
-    # print("Length of train_vm: ", len(train_vm))
-    # print("Length of test_vm: ", len(test_vm))
-
-
-
 
 
     # ### Model evaluation
@@ -251,34 +224,8 @@ def global_function(configuration, data):
             prediction_df = pd.DataFrame.from_dict({"Model": models_names, "Next Period Forecast": prediction_values})
             results = pd.merge(results, prediction_df, on="Model")
 
-        return results
+        return results   
 
-
-    def evaluation_graph(y_hat, forecast_label, multivariate=False):
-        
-        if multivariate:
-            x_train = np.arange(start=1, stop=len(train_vm)+1, step=1)
-            x_test = np.arange(start=len(train_vm)+1, stop=len(data_vm)+1, step=1)
-
-            plt.figure(figsize = (16, 6))
-            plt.plot(x_train, train_vm["cnt"], label = "train") 
-            plt.plot(x_test, test_vm["cnt"], label = "test")
-        
-        else:
-        
-            x_train = np.arange(start=1, stop=len(train_tm)+1, step=1)
-            x_test = np.arange(start=len(train_tm)+1, stop=len(data_tm)+1, step=1)
-
-            plt.figure(figsize = (16, 6))
-            plt.plot(x_train, train_tm["cnt"], label = "train") 
-            plt.plot(x_test, test_tm["cnt"], label = "test")
-            
-            
-        plt.plot(x_test, y_hat, label = forecast_label)
-        plt.legend(loc="best")
-        plt.title(forecast_label)
-        plt.show()
-        
 
     def best_model_selection(param_values, y_hat, prediction, multi_param_model=True):
 
@@ -302,15 +249,9 @@ def global_function(configuration, data):
             }
 
 
-        
-
-
-
-
-
-
 
     models_forecasts = {}
+
 
     # # Models implementation
     # ### Naive model
@@ -328,7 +269,6 @@ def global_function(configuration, data):
     naive_metrics = model_evaluation("naive", test_tm["cnt"], y_hat["naive"], prediction, multi_param_model)
     models_forecasts['naive'] = list(y_hat["naive"])
     naive_metrics       
-    #evaluation_graph(y_hat["naive"], "Naive forecast")
 
 
 
@@ -349,7 +289,6 @@ def global_function(configuration, data):
     models_forecasts["cumulative"] = list(y_hat["cumulative"])
     cumulative_metrics
 
-    #evaluation_graph(y_hat["cumulative"], "Cumulative forecast")
 
 
 
@@ -388,16 +327,11 @@ def global_function(configuration, data):
 
     best_m_av_model = results["best_model"]
     
-    #evaluation_graph(y_hat[best_m_av_model], "Moving average forecast")
-
-
 
 
     # ### Simple exponential smoothing
 
     ses_model = SimpleExpSmoothing(np.asarray(test_tm['cnt']), initialization_method="estimated").fit()
-
-    #print("alpha: ", ses_model.model.params['smoothing_level'])
 
     prediction = {"ses": ses_model.forecast(1)[0]}
 
@@ -405,9 +339,6 @@ def global_function(configuration, data):
     ses_model_metrics = model_evaluation("ses", test_tm["cnt"], ses_model.fittedvalues, prediction, multi_param_model)
     ses_model_metrics
     models_forecasts["ses"] = list(ses_model.fittedvalues)
-
-    #evaluation_graph(ses_model.fittedvalues, "SES Model")
-
 
 
 
@@ -417,9 +348,6 @@ def global_function(configuration, data):
 
     h_simple_model = Holt(np.asarray(test_tm['cnt']), initialization_method="estimated").fit()
 
-    # print("alpha: ", h_simple_model.model.params['smoothing_level'])
-    # print("beta: ", h_simple_model.model.params['smoothing_trend'])
-
     prediction = {"h_simple_model": h_simple_model.forecast(1)[0]}
 
     multi_param_model = False
@@ -427,14 +355,10 @@ def global_function(configuration, data):
     h_simple_metrics
     models_forecasts["h_simple_model"] = list(h_simple_model.fittedvalues)
 
-    #evaluation_graph(h_simple_model.fittedvalues, "Holt's Simple Model")
 
 
     # ##### Holt exponential model
     h_exp_model = Holt(np.asarray(test_tm['cnt']), exponential=True, initialization_method="estimated").fit()
-
-    # print("alpha: ", h_exp_model.model.params['smoothing_level'])
-    # print("beta: ", h_exp_model.model.params['smoothing_trend'])
 
     prediction = {"h_model_exp": h_exp_model.forecast(1)[0]}
 
@@ -443,15 +367,11 @@ def global_function(configuration, data):
     h_exp_metrics
     models_forecasts["h_model_exp"] = list(h_exp_model.fittedvalues)
 
-    #evaluation_graph(h_model.fittedvalues, "Holt's Exponential Model ")
 
 
     # ##### Holt additive model damped 
 
     h_add_d_model = Holt(np.asarray(test_tm['cnt']), damped_trend=True, initialization_method="estimated").fit()
-
-    # print("alpha: ", h_add_d_model.model.params['smoothing_level'])
-    # print("beta: ", h_add_d_model.model.params['smoothing_trend'])
 
     prediction = {"h_add_d_model": h_add_d_model.forecast(1)[0]}
 
@@ -459,10 +379,6 @@ def global_function(configuration, data):
     h_add_d_metrics = model_evaluation("h_add_d_model", test_tm["cnt"], h_add_d_model.fittedvalues, prediction, multi_param_model)
     h_add_d_metrics
     models_forecasts["h_add_d_model"] = list(h_add_d_model.fittedvalues)
-
-    #evaluation_graph(h_add_d_model.fittedvalues, "Holt's Additive Damped Model ")
-
-
 
 
 
@@ -492,12 +408,6 @@ def global_function(configuration, data):
     models_forecasts["hw_mult_model"] = list(hw_mult_model.fittedvalues)
     models_forecasts["hw_add_d_model"] = list(hw_add_d_model.fittedvalues)
 
-    #evaluation_graph(hw_add_model.fittedvalues, "Holt Winter Additive Model ")
-    #evaluation_graph(hw_mult_model.fittedvalues, "Holt Winter Multiplicative Model")
-    #evaluation_graph(hw_add_d_model.fittedvalues, "Holt Winter Additive Damped Model")
-
-
-
 
 
 
@@ -508,7 +418,6 @@ def global_function(configuration, data):
 
     features = predictors
 
-    
 
     x_train  = train_vm[features]
     x_test = test_vm[features]
@@ -527,24 +436,6 @@ def global_function(configuration, data):
         OH_x_test = x_test
 
     else:
-        # # Apply one-hot encoder to each column with categorical data
-        # OH_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
-        # OH_cols_train = pd.DataFrame(OH_encoder.fit_transform(x_train[cat_cols]))
-        # OH_cols_test = pd.DataFrame(OH_encoder.transform(x_test[cat_cols]))
-
-        # # One-hot encoding removed index; put it back
-        # OH_cols_train.index = x_train.index
-        # OH_cols_test.index = x_test.index
-
-        # # Remove categorical columns (will replace with one-hot encoding)
-        # num_x_train = x_train.drop(cat_cols, axis=1)
-        # num_x_test = x_test.drop(cat_cols, axis=1)
-
-        # # Add one-hot encoded columns to numerical features
-        # OH_x_train = pd.concat([num_x_train, OH_cols_train], axis=1)
-        # OH_x_test = pd.concat([num_x_test, OH_cols_test], axis=1)
-        
-
         labelencoder_dict = {}
         onehotencoder_dict = {}
         OH_x_cols_train_test_combined = None
@@ -569,31 +460,8 @@ def global_function(configuration, data):
         num_x_cols_train_test_combined = x_cols_train_test_combined.drop(cat_cols, axis=1)
         OH_x_train_test_combined = pd.concat([num_x_cols_train_test_combined, OH_x_cols_train_test_combined], axis=1)
 
-        
-        print("***********************")
-        print("*")
-        print("*")
-        print("*")
-        print(num_x_cols_train_test_combined.shape)
-        print("*")
-        print("*")
-        print("*")
-        print("***********************")
-
-
         OH_x_train = OH_x_train_test_combined[:limit_vm] 
         OH_x_test = OH_x_train_test_combined[limit_vm:]
-    
- 
-    print("***********************")
-    print("*")
-    print("*")
-    print("*")
-    print(OH_x_train_test_combined.shape)
-    print("*")
-    print("*")
-    print("*")
-    print("***********************")
 
 
 
@@ -611,9 +479,6 @@ def global_function(configuration, data):
     multi_param_model = False
     lin_reg_metrics = model_evaluation("lin_reg", y_test, forecasts, prediction, multi_param_model)
     models_forecasts["lin_reg"] = list(forecasts)
-
-    #evaluation_graph(forecasts, "Linear Regression", multivariate = True) 
-
 
 
 
@@ -633,10 +498,6 @@ def global_function(configuration, data):
     svr_metrics
     models_forecasts["svr"] = list(forecasts)
 
-    #evaluation_graph(forecasts, "Support Vector Regression", multivariate = True) 
-
-
-
 
 
     ### XGBoost Regression
@@ -654,10 +515,6 @@ def global_function(configuration, data):
     xgb_reg_metrics = model_evaluation("xgb_reg", y_test, forecasts, prediction, multi_param_model)
     xgb_reg_metrics
     models_forecasts["xgb_reg"] = list(forecasts)
-
-    #evaluation_graph(forecasts, "XG Boost", multivariate = True) 
-
-
 
 
 
@@ -703,21 +560,6 @@ def global_function(configuration, data):
         return X_train, Y_train, X_test, Y_test
 
 
-    # ## Categorical variables should be encoded in "data_vm" before training the model
-
-    # # Apply one-hot encoder to each column with categorical data
-    # OH_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
-    # OH_data_cols = pd.DataFrame(OH_encoder.fit_transform(data_vm[cat_cols]))
-
-    # # One-hot encoding removed index; put it back
-    # OH_data_cols.index = data_vm.index
-
-    # # Remove categorical columns (will replace with one-hot encoding)
-    # num_data = data_vm.drop(cat_cols, axis=1)
-
-    # # Add one-hot encoded columns to numerical features
-    # OH_data_vm = pd.concat([num_data, OH_data_cols], axis=1)
-
 
     ## Create a pivot of the data to show the periods as columns
     pivoted_data_vm = pd.DataFrame(data_vm['cnt'])
@@ -741,28 +583,15 @@ def global_function(configuration, data):
     length = len(last_50_cnt_of_data)
     last_50_cnt_of_data = last_50_cnt_of_data[length-50:length]
 
-    
-
-    print("***********************")
-    print("*")
-    print("*")
-    print("*")
-    print(len(last_50_cnt_of_data))
-    print("*")
-    print("*")
-    print("***********************")
 
     prediction_reg_tree = reg_tree.predict([last_50_cnt_of_data])[0]
 
     prediction = {"reg_tree": prediction_reg_tree}
 
-
     multi_param_model = False
     reg_tree_metrics = model_evaluation("reg_tree", Y_test, forecasts, prediction, multi_param_model)
     reg_tree_metrics
     models_forecasts["reg_tree"] = list(forecasts)
-
-    #evaluation_graph(forecasts, "Regression Tree", multivariate = True) 
 
 
 
@@ -786,7 +615,7 @@ def global_function(configuration, data):
         model_name = metrics_sum.iloc[i]['Model']
         ranked_models_forecasts[model_name] = models_forecasts[model_name]
 
-    #pd.DataFrame.from_dict(ranked_models_forecasts)
+
 
     ### Preparing the object to be returned
 
@@ -794,6 +623,7 @@ def global_function(configuration, data):
     test_data_index = list(np.arange(start=len(train_vm)+1, stop=len(data_vm)+1, step=1))
             
     results = {
+        "data": data, 
         "train_data_index": train_data_index,
         "test_data_index": test_data_index,
         "train_data" : list(train_tm["cnt"]),
@@ -810,11 +640,6 @@ def global_function(configuration, data):
 
 
     
-
-    
-
-    #return metrics_sum
-    #return configuration
     return results
 
 

@@ -1,32 +1,29 @@
-from flask import Flask, json, render_template, jsonify, session, request, redirect, url_for
+from flask import Flask, render_template, jsonify, session, request, redirect, url_for
 from pandas.core.indexes.base import Index
 from flask_session import Session
 from datetime import timedelta
 from flask_restful import Resource
 import models
 import pandas as pd
-import temfile
 from flask_dropzone import Dropzone
 import os
 import re
-import json
 
 sess = Session()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-
 app = Flask(__name__)
 
 app.config.update(
-    UPLOADED_PATH='temp/',
+    UPLOADED_PATH=os.path.join(basedir, 'uploads'),
     # Flask-Dropzone config:
+    DROPZONE_ALLOWED_FILE_CUSTOM= True,
+    DROPZONE_ALLOWED_FILE_TYPE='.csv',
     DROPZONE_MAX_FILE_SIZE=1000,
-    DROPZONE_ALLOWED_FILE_CUSTOM = True,
-    DROPZONE_ALLOWED_FILE_TYPE = '.csv',
     DROPZONE_MAX_FILES=1,
     DROPZONE_REDIRECT_VIEW='configuration', 
-    DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
+    DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h3>Drop files here or click to upload.</h3>"  # set redirect view
 )
 
 dropzone = Dropzone(app)
@@ -36,30 +33,27 @@ dropzone = Dropzone(app)
 def upload():
     if request.method == 'POST':
         f = request.files.get('file')
-        #data = pd.read_csv(f)
+        f.save(os.path.join(app.config['UPLOADED_PATH'], "data.csv"))
+        return render_template('simple.html')
 
-        session["data"] = f
-        #return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
 
 @app.route("/configuration", methods= ["GET", "POST"])
 def configuration():
+    results = models.columns_names()
+    columns = results["columns"]
+    data = results["data"]
 
-    data = session.get('data', None)
-    return data
+    session.permanent = True
+    session['data'] = data
 
-    # results = models.columns_names(data)
-    # columns = results["columns"]
-
-    # session.permanent = True
-
-    # if request.method == "POST":
-    #     session.permanent = True
-    #     form_data = request.form
-    #     session['configuration'] = form_data
-    #     return redirect("/detailed_ranking")
-    # return render_template("configuration.html", columns = columns)
+    if request.method == "POST":
+        session.permanent = True
+        form_data = request.form
+        session['configuration'] = form_data
+        return redirect("/detailed_ranking")
+    return render_template("configuration.html", columns = columns)
 
 
 @app.route("/detailed_ranking")
@@ -80,7 +74,7 @@ def detailed_ranking():
     session['prediction_reg_tree'] = results['prediction_reg_tree']
 
     return render_template("detailed_ranking.html", results = results)
-    #return results
+    
 
 
 @app.route("/simple_ranking")
@@ -156,8 +150,8 @@ if __name__ == "__main__":
     # Quick test configuration. Please use proper Flask configuration options
     # in production settings, and use a separate file or environment variables
     # to manage the secret key!
-    app.secret_key = os.urandom(24)
-    app.config["SESSION_FILE_DIR"] = tempfile.mkdtemp()
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
     app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=300000)
 
     sess.init_app(app)
