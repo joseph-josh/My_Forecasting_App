@@ -18,7 +18,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 app.config.update(
-    UPLOADED_PATH='./uploads',
+    UPLOADED_PATH='uploads/',
     # Flask-Dropzone config:
     DROPZONE_MAX_FILE_SIZE=1000,
     DROPZONE_ALLOWED_FILE_CUSTOM = True,
@@ -38,7 +38,7 @@ def upload():
         f = request.files.get('file')
         #data = pd.read_csv(f)
 
-        session["data"] = f
+        session["data"] = "Test of smooth running of session"
         #return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
