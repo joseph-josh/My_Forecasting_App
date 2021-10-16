@@ -21,7 +21,8 @@ app.config.update(
     UPLOADED_PATH='./uploads',
     # Flask-Dropzone config:
     DROPZONE_MAX_FILE_SIZE=1000,
-    DROPZONE_ALLOWED_FILE_TYPE = 'image',
+    DROPZONE_ALLOWED_FILE_CUSTOM = True,
+    DROPZONE_ALLOWED_FILE_TYPE = '.csv',
     DROPZONE_MAX_FILES=1,
     DROPZONE_REDIRECT_VIEW='configuration', 
     DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
@@ -156,8 +157,6 @@ if __name__ == "__main__":
     # to manage the secret key!
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
-    #app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
-    #app.config['DROPZONE_ALLOWED_FILE_TYPE'] = '.csv'
     app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=300000)
 
     sess.init_app(app)
