@@ -24,8 +24,7 @@ app.config.update(
     DROPZONE_ALLOWED_FILE_CUSTOM = True,
     DROPZONE_ALLOWED_FILE_TYPE = '.csv',
     DROPZONE_MAX_FILES=1,
-    DROPZONE_SERVER_ERROR= "Server error: {{statusCode}}",
-    DROPZONE_REDIRECT_VIEW='configuration', 
+    #DROPZONE_REDIRECT_VIEW='configuration', 
     DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
 )
 
@@ -47,7 +46,7 @@ def upload():
 def configuration():
 
     data = session.get('data', None)
-    return jsonify(data)
+    return data
 
     # results = models.columns_names(data)
     # columns = results["columns"]
