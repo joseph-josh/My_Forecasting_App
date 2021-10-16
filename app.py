@@ -18,7 +18,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 app.config.update(
-    UPLOADED_PATH='/uploads',
+    UPLOADED_PATH='./uploads',
     # Flask-Dropzone config:
     DROPZONE_MAX_FILE_SIZE=1000,
     DROPZONE_ALLOWED_FILE_TYPE = 'image',
@@ -47,17 +47,17 @@ def configuration():
     data = session.get('data', None)
     return jsonify(data)
 
-    results = models.columns_names(data)
-    columns = results["columns"]
+    # results = models.columns_names(data)
+    # columns = results["columns"]
 
-    session.permanent = True
+    # session.permanent = True
 
-    if request.method == "POST":
-        session.permanent = True
-        form_data = request.form
-        session['configuration'] = form_data
-        return redirect("/detailed_ranking")
-    return render_template("configuration.html", columns = columns)
+    # if request.method == "POST":
+    #     session.permanent = True
+    #     form_data = request.form
+    #     session['configuration'] = form_data
+    #     return redirect("/detailed_ranking")
+    # return render_template("configuration.html", columns = columns)
 
 
 @app.route("/detailed_ranking")
