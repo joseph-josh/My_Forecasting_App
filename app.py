@@ -5,6 +5,7 @@ from datetime import timedelta
 from flask_restful import Resource
 import models
 import pandas as pd
+import temfile
 from flask_dropzone import Dropzone
 import os
 import re
@@ -37,7 +38,7 @@ def upload():
         f = request.files.get('file')
         #data = pd.read_csv(f)
 
-        session["data"] = "Test of smooth running of session"
+        session["data"] = f
         #return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     # in production settings, and use a separate file or environment variables
     # to manage the secret key!
     app.secret_key = os.urandom(24)
-    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config["SESSION_FILE_DIR"] = tempfile.mkdtemp()
     app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=300000)
 
     sess.init_app(app)
