@@ -24,6 +24,7 @@ app.config.update(
     DROPZONE_ALLOWED_FILE_CUSTOM = True,
     DROPZONE_ALLOWED_FILE_TYPE = '.csv',
     DROPZONE_MAX_FILES=1,
+    DROPZONE_SERVER_ERROR= "Server error: {{statusCode}}",
     DROPZONE_REDIRECT_VIEW='configuration', 
     DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
 )
@@ -35,9 +36,9 @@ dropzone = Dropzone(app)
 def upload():
     if request.method == 'POST':
         f = request.files.get('file')
-        data = pd.read_csv(f)
+        #data = pd.read_csv(f)
 
-        session["data"] = data
+        session["data"] = f
         #return jsonify(data.to_json(orient="split"))
     return render_template('index.html')
 
