@@ -24,7 +24,7 @@ app.config.update(
     DROPZONE_ALLOWED_FILE_CUSTOM = True,
     DROPZONE_ALLOWED_FILE_TYPE = '.csv',
     DROPZONE_MAX_FILES=1,
-    #DROPZONE_REDIRECT_VIEW='configuration', 
+    DROPZONE_REDIRECT_VIEW='configuration', 
     DROPZONE_DEFAULT_MESSAGE= "<i class='notika-icon notika-cloud' ></i><h4>Drop files here or click to upload.</h4>"  # set redirect view
 )
 
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     # Quick test configuration. Please use proper Flask configuration options
     # in production settings, and use a separate file or environment variables
     # to manage the secret key!
-    app.secret_key = 'super secret key'
+    app.secret_key = os.urandom(24)
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=300000)
 
